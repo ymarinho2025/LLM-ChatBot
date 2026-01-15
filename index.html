@@ -1,54 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chat LLM</title>
-  <style>
-    body { font-family: Arial; max-width: 800px; margin: 40px auto; padding: 0 16px; }
-    textarea { width: 100%; height: 90px; }
-    button { padding: 10px 14px; margin-top: 8px; cursor: pointer; }
-    pre { white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-radius: 8px; }
-  </style>
-</head>
-<body>
-  <h1>Chat com LLM (Vercel)</h1>
 
-  <textarea id="pergunta" placeholder="Digite sua pergunta..."></textarea><br>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Cansado AI</title>
+    <meta name="description"
+        content="Sou o Dev Cansado, a melhor escolha de assistente de IA pra você!">
+    <meta name="author" content="YMarinho2025">
+    <link rel="icon" type="image/png" href="./assets/images/logo.png">
+    <link rel="stylesheet" href="./assets/css/div.css">
+    <script src="./assets/js/script.js" defer></script>
+
+<body>
+
+  <h1 class="aboutme">Olá, sou o Dev Cansado! Uma IA desenvolvida pelo Yuri Marinho.</h1>
+  <h1 class="help">Como posso ajudar?</h1>
+  <textarea id="pergunta" placeholder="  Pergunte alguma coisa.."></textarea><br>
   <button id="btn">Enviar</button>
 
-  <h3>Resposta</h3>
+  <h3 class="response">resposta</h3>
   <pre id="saida">...</pre>
-
-  <script>
-    const btn = document.getElementById("btn");
-    const perguntaEl = document.getElementById("pergunta");
-    const saida = document.getElementById("saida");
-
-    btn.addEventListener("click", async () => {
-      const pergunta = perguntaEl.value.trim();
-      if (!pergunta) return;
-
-      saida.textContent = "Carregando...";
-
-      try {
-        const resp = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pergunta })
-        });
-
-        const data = await resp.json();
-        if (!resp.ok) {
-          saida.textContent = "Erro: " + (data?.error || "desconhecido") + "\n" + JSON.stringify(data, null, 2);
-          return;
-        }
-
-        saida.textContent = data.resposta || "(sem resposta)";
-      } catch (e) {
-        saida.textContent = "Falha: " + e;
-      }
-    });
-  </script>
 </body>
 </html>
