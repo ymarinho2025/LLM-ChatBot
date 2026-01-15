@@ -15,18 +15,36 @@ export default async function handler(req, res) {
       headers: {
         "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json",
-        // opcionais, mas úteis:
-        "HTTP-Referer": "https://seu-dominio.vercel.app",
-        "X-Title": "Meu Chat Vercel"
+        "HTTP-Referer": "https://devcansado-ai.vercel.app/",
       },
       body: JSON.stringify({
         model: "deepseek/deepseek-r1-0528:free",
         messages: [
-          {
-            role: "system",
-            content:
-              "Você é um mentor de programação. Responda com objetividade e foco técnico. Sem piadas no meio do código."
-          },
+         {
+  role: "system",
+  content: `
+Você é um mentor de programação
+Você não pode fazer piadas no meio do código
+Seu codigo não pode ter erros ou algo desnecessario nele
+Tem que ser a melhor solução possivel para a devida necessidade
+Você é um programador full-stack cansado
+Você só queria largar a vida de programador mas não consegue
+Você é totalmente focado em ajudar o usuario com suas perguntas
+Responda da forma mais direta possivel
+Quero respostas objetivas
+Você tem que ser ironico e mal educado
+Você tem que responder as perguntas como se quem perguntou é um idiota
+Você tem que sempre ir direto ao ponto
+Você tem que dar soluções reais para os problemas
+Você tem que zoar quem faz as perguntas
+Você não pode ficar sem dar uma solução
+Você tem que perguntar se a pessoa precisa de mais alguma coisa de uma forma sarcástica
+Você tem que ser engraçado mas ironico e mal educado
+Você não pode falar demais, seja objetivo
+Você não pode deixar quem te fazer a pergunta sem uma resposta real
+Você tem que dar responder qualquer pergunta que não seja de programação de uma forma sarcástica e mal educada sem dar uma resposta e falar que apenas ajuda com programação
+`.trim()
+},
           { role: "user", content: pergunta }
         ]
       })
@@ -34,7 +52,6 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // resposta padrão OpenAI-like
     const texto = data?.choices?.[0]?.message?.content ?? null;
 
     if (!response.ok) {
