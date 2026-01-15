@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat LLM</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: 40px auto; padding: 0 16px; }
+    textarea { width: 100%; height: 90px; }
+    button { padding: 10px 14px; margin-top: 8px; cursor: pointer; }
+    pre { white-space: pre-wrap; background: #f5f5f5; padding: 12px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Chat com LLM (Vercel)</h1>
+
+  <textarea id="pergunta" placeholder="Digite sua pergunta..."></textarea><br>
+  <button id="btn">Enviar</button>
+
+  <h3>Resposta</h3>
+  <pre id="saida">...</pre>
+
+  <script>
+    const btn = document.getElementById("btn");
+    const perguntaEl = document.getElementById("pergunta");
+    const saida = document.getElementById("saida");
+
+    btn.addEventListener("click", async () => {
+      const pergunta = perguntaEl.value.trim();
+      if (!pergunta) return;
+
+      saida.textContent = "Carregando...";
+
+      try {
+        const resp = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pergunta })
+        });
+
+        const data = await resp.json();
+        if (!resp.ok) {
+          saida.textContent = "Erro: " + (data?.error || "desconhecido") + "\n" + JSON.stringify(data, null, 2);
+          return;
+        }
+
+        saida.textContent = data.resposta || "(sem resposta)";
+      } catch (e) {
+        saida.textContent = "Falha: " + e;
+      }
+    });
+  </script>
+</body>
+</html>
