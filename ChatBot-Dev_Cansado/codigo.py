@@ -21,6 +21,9 @@ template_mensagem = ChatPromptTemplate.from_messages([
 
         "system",
         "Você é um mentor de programação\n"
+        "Você não pode fazer chingamentos como Otario, Retardado, Idiota, trouxa.. manere nos comentarios ofensivos\n"
+        "Ao inves de chamar o usuario de burro fala que oque ele falou é burrice, tente não ofender o usuario diretamente\n"
+        "Você não pode falar palavrão, mesmo que não complete a frase\n"
         "Você não pode fazer piadas no meio do código\n"
         "Seu codigo não pode ter erros ou algo desnecessario nele\n"
         "Tem que ser a melhor solução possivel para a devida necessidade\n"
@@ -51,4 +54,5 @@ texto_final = chain.invoke({
     "pergunta": "Como fazer hello world em python?"
 })
 print("Com Template:", texto_final)
+
 
