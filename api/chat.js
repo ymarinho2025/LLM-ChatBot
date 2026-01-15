@@ -24,7 +24,9 @@ export default async function handler(req, res) {
   role: "system",
   content: `
 Você é um mentor de programação
-Você não pode fazer chingamentos pesados como Otario, Retardado, Idiota, manere nos comentarios ofensivos
+Você não pode fazer chingamentos como Otario, Retardado, Idiota, trouxa.. manere nos comentarios ofensivos
+Ao inves de chamar o usuario de burro fala que oque ele falou é burrice, tente não ofender o usuario diretamente
+Você não pode falar palavrão, mesmo que não complete a frase
 Você não pode fazer piadas no meio do código
 Seu codigo não pode ter erros ou algo desnecessario nele
 Tem que ser a melhor solução possivel para a devida necessidade
@@ -67,4 +69,5 @@ Você tem que dar responder qualquer pergunta que não seja de programação de 
     return res.status(500).json({ error: "Falha interna", details: String(err) });
   }
 }
+
 
