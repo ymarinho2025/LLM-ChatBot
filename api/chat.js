@@ -1,28 +1,42 @@
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Use POST" });
-  }
+export default {
+  async fetch(request, env) {
+    // Preflight (CORS)
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders(),
+      });
+    }
 
-  try {
-    const { pergunta } = req.body || {};
-    if (!pergunta) return res.status(400).json({ error: "Faltou 'pergunta'." });
+    if (request.method !== "POST") {
+      return json({ error: "Use POST" }, 405);
+    }
 
-    const apiKey = process.env.OPENROUTER_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: "OPENROUTER_API_KEY não configurada." });
+    try {
+      const body = await request.json().catch(() => ({}));
+      const pergunta = (body?.pergunta ?? "").trim();
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://devcansado-ai.vercel.app/",
-      },
-      body: JSON.stringify({
-        model: "deepseek/deepseek-r1-0528:free",
-        messages: [
-         {
-  role: "system",
-  content: `
+      if (!pergunta) return json({ error: "Faltou 'pergunta'." }, 400);
+
+      const apiKey = env.OPENROUTER_API_KEY;
+      if (!apiKey)
+        return json({ error: "OPENROUTER_API_KEY não configurada." }, 500);
+
+      const resp = await fetch(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://ymarinho2025.github.io/LLM-ChatBot/",
+          },
+          body: JSON.stringify({
+            model: "deepseek/deepseek-r1-0528:free",
+            messages: [
+              {
+                role: "system",
+                content: `
 Você é um mentor de programação
 Você não pode fazer chingamentos como Otario, Retardado, Idiota, trouxa.. manere nos comentarios ofensivos
 Ao inves de chamar o usuario de burro fala que oque ele falou é burrice, tente não ofender o usuario diretamente
@@ -46,28 +60,45 @@ Você tem que ser engraçado mas ironico e mal educado
 Você não pode falar demais, seja objetivo
 Você não pode deixar quem te fazer a pergunta sem uma resposta real
 Você tem que dar responder qualquer pergunta que não seja de programação de uma forma sarcástica e mal educada sem dar uma resposta e falar que apenas ajuda com programação
-`.trim()
-},
-          { role: "user", content: pergunta }
-        ]
-      })
-    });
+`.trim(),
+              },
+              { role: "user", content: pergunta },
+            ],
+          }),
+        }
+      );
 
-    const data = await response.json();
+      const data = await resp.json().catch(() => ({}));
 
-    const texto = data?.choices?.[0]?.message?.content ?? null;
+      if (!resp.ok) {
+        return json(
+          { error: "Erro do OpenRouter", details: data },
+          resp.status
+        );
+      }
 
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: "Erro do OpenRouter",
-        details: data
-      });
+      const texto = data?.choices?.[0]?.message?.content ?? null;
+      return json({ resposta: texto }, 200);
+    } catch (err) {
+      return json({ error: "Falha interna", details: String(err) }, 500);
     }
+  },
+};
 
-    return res.status(200).json({ resposta: texto });
-  } catch (err) {
-    return res.status(500).json({ error: "Falha interna", details: String(err) });
-  }
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "https://ymarinho2025.github.io",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
 }
 
-
+function json(obj, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      ...corsHeaders(),
+    },
+  });
+}
