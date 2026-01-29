@@ -1,0 +1,49 @@
+body {
+  background-color: blue;
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+.aboutme { font-size: 1.1rem; text-align:center; margin: 0 auto; }
+
+.help {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 40px;
+}
+
+h1, h2, h3, p {
+  color: white;
+}
+
+textarea {
+  background-color: rgb(235,235,235);
+  border-radius: 16px;
+  width: 95%;
+  height: 16px;
+  padding: 12px;
+  margin: 24px 0px 0px 1%;
+  border: none;
+  resize: vertical;
+  outline: none;
+}
+
+button {
+  display:block;
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin: 16px auto;
+  cursor: pointer;
+  border: none;
+}
+
+.response { text-align:center; font-size: 1.1rem; margin-top: 24px; }
+
+pre {
+  white-space: pre-wrap;
+  background: rgb(235,235,235);
+  padding: 12px;
+  border-radius: 8px;
+}
