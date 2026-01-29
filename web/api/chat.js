@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       headers: {
         "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://marinho-chatbot.vercel.app/",
+        "HTTP-Referer": "https://marinho-chatbot.vercel.app/web/",
       },
       body: JSON.stringify({
         model: "deepseek/deepseek-r1-0528:free",
