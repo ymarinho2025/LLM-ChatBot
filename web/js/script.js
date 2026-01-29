@@ -9,7 +9,7 @@ const btn = document.getElementById("btn");
       saida.textContent = "Carregando...";
 
       try {
-        const resp = await fetch("/api/chat", {
+        const resp = await fetch("/api/chat.js", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ pergunta })
